@@ -13,6 +13,7 @@ import {
   Flex,
   Text,
 } from "@radix-ui/themes";
+import { Skeleton } from "./components";
 
 const NavBar = () => {
   return (
@@ -36,7 +37,7 @@ const AuthStatus = () => {
   const { status, data: session } = useSession();
 
   if (status === "loading") {
-    return <Text>Loading...</Text>;
+    return <Skeleton width="3rem" />;
   }
 
   return (
