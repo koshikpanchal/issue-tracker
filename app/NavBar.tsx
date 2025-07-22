@@ -17,13 +17,6 @@ import {
 const NavBar = () => {
   const currentPath = usePathname();
   const { status, data: session } = useSession();
-  const [user, setUser] = useState(session?.user);
-
-  useEffect(() => {
-    if (session?.user) {
-      setUser(session.user);
-    }
-  }, [session]);
 
   const links = [
     { href: "/", label: "Dashboard" },
@@ -33,7 +26,7 @@ const NavBar = () => {
   return (
     <nav className="border-b mb-5 px-5 py-3">
       <Container>
-        <Flex justify="between" py="3">
+        <Flex justify="between">
           <Flex align="center" gap="3">
             <Link href="/">
               <AiFillBug />
@@ -60,16 +53,17 @@ const NavBar = () => {
               <DropdownMenu.Root>
                 <DropdownMenu.Trigger>
                   <Avatar
-                    src={user!.image!}
+                    src={session.user!.image!}
                     fallback="?"
                     alt="User Avatar"
                     radius="full"
+                    size="2"
                     className="cursor-pointer"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Content>
                   <DropdownMenu.Label>
-                    <Text size="2">{user?.email}</Text>
+                    <Text size="2">{session.user?.email}</Text>
                   </DropdownMenu.Label>
                   <DropdownMenu.Item>
                     <Link href="/api/auth/signout">Logout</Link>
