@@ -8,38 +8,27 @@ import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
-  const {
-    data: users,
-    error,
-    isLoading,
-  } = useQuery<User[]>({
-    queryKey: ["users"],
-    queryFn: async () => {
-      const response = await axios.get<User[]>("/api/users");
-      return response.data;
-    },
-    staleTime: 1000 * 60,
-    retry: 3,
-    refetchOnWindowFocus: false,
-  });
+  const { data: users, error, isLoading } = useUsers();
 
   if (error) return null;
 
   if (isLoading) return <Skeleton />;
 
+  const assignIssue = (userId: string) => {
+    axios
+      .patch(`/api/issues/${issue.id}`, {
+        assignedToUserId: userId === "null" ? null : userId,
+      })
+      .catch((err) => {
+        toast.error("Failed to update assignee");
+      });
+  };
+
   return (
     <>
       <Select.Root
         defaultValue={issue.assignedToUserId ?? "null"}
-        onValueChange={(userId) => {
-          axios
-            .patch(`/api/issues/${issue.id}`, {
-              assignedToUserId: userId === "null" ? null : userId,
-            })
-            .catch((err) => {
-              toast.error("Failed to update assignee");
-            });
-        }}
+        onValueChange={assignIssue}
       >
         <Select.Trigger placeholder="Select Assignee"></Select.Trigger>
         <Select.Content>
@@ -57,6 +46,19 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
       <Toaster />
     </>
   );
+};
+
+const useUsers = () => {
+  return useQuery<User[]>({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await axios.get<User[]>("/api/users");
+      return response.data;
+    },
+    staleTime: 1000 * 60 * 5,
+    retry: 3,
+    refetchOnWindowFocus: false,
+  });
 };
 
 export default AssigneeSelect;
