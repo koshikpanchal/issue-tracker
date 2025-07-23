@@ -5,7 +5,7 @@ import { Issue, User } from "@/app/generated/prisma";
 import { Select } from "@radix-ui/themes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   const {
@@ -28,27 +28,34 @@ const AssigneeSelect = ({ issue }: { issue: Issue }) => {
   if (isLoading) return <Skeleton />;
 
   return (
-    <Select.Root
-      defaultValue={issue.assignedToUserId ?? "null"}
-      onValueChange={(userId) => {
-        axios.patch(`/api/issues/${issue.id}`, {
-          assignedToUserId: userId === "null" ? null : userId,
-        });
-      }}
-    >
-      <Select.Trigger placeholder="Select Assignee"></Select.Trigger>
-      <Select.Content>
-        <Select.Group>
-          <Select.Label>Suggestions</Select.Label>
-          <Select.Item value="null">Unassigned</Select.Item>
-          {users?.map((u) => (
-            <Select.Item key={u.id} value={u.id}>
-              {u.name}
-            </Select.Item>
-          ))}
-        </Select.Group>
-      </Select.Content>
-    </Select.Root>
+    <>
+      <Select.Root
+        defaultValue={issue.assignedToUserId ?? "null"}
+        onValueChange={(userId) => {
+          axios
+            .patch(`/api/issues/${issue.id}`, {
+              assignedToUserId: userId === "null" ? null : userId,
+            })
+            .catch((err) => {
+              toast.error("Failed to update assignee");
+            });
+        }}
+      >
+        <Select.Trigger placeholder="Select Assignee"></Select.Trigger>
+        <Select.Content>
+          <Select.Group>
+            <Select.Label>Suggestions</Select.Label>
+            <Select.Item value="null">Unassigned</Select.Item>
+            {users?.map((u) => (
+              <Select.Item key={u.id} value={u.id}>
+                {u.name}
+              </Select.Item>
+            ))}
+          </Select.Group>
+        </Select.Content>
+      </Select.Root>
+      <Toaster />
+    </>
   );
 };
 
