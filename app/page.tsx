@@ -1,9 +1,10 @@
 import Image from "next/image";
+import LatestIssues from "./LatestIssues";
 
 export default function Home() {
   return (
     <main>
-      <h1>Hello World</h1>
+      <LatestIssues />
     </main>
   );
 }
