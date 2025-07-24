@@ -30,43 +30,45 @@ const Pagination = ({ currentPage, pageSize, itemCount }: PaginationProps) => {
   };
 
   return (
-    <Flex align="center" gap="2">
-      <Text size="2">
-        Page {currentPage} of {pageCount}
-      </Text>
-      <Button
-        color="gray"
-        variant="soft"
-        disabled={currentPage <= 1}
-        onClick={() => changePage(1)}
-      >
-        <DoubleArrowLeftIcon />
-      </Button>
-      <Button
-        color="gray"
-        variant="soft"
-        disabled={currentPage <= 1}
-        onClick={() => changePage(currentPage - 1)}
-      >
-        <ChevronLeftIcon />
-      </Button>
-      <Button
-        color="gray"
-        variant="soft"
-        disabled={currentPage === pageCount}
-        onClick={() => changePage(currentPage + 1)}
-      >
-        <ChevronRightIcon />
-      </Button>
-      <Button
-        color="gray"
-        variant="soft"
-        disabled={currentPage === pageCount}
-        onClick={() => changePage(pageCount)}
-      >
-        <DoubleArrowRightIcon />
-      </Button>
-    </Flex>
+    <div className="flex justify-center items-center">
+      <Flex align="center" gap="2" mt="4">
+        <Text size="2">
+          Page {currentPage} of {pageCount}
+        </Text>
+        <Button
+          color="gray"
+          variant="soft"
+          disabled={currentPage <= 1}
+          onClick={() => changePage(1)}
+        >
+          <DoubleArrowLeftIcon />
+        </Button>
+        <Button
+          color="gray"
+          variant="soft"
+          disabled={currentPage <= 1}
+          onClick={() => changePage(currentPage - 1)}
+        >
+          <ChevronLeftIcon />
+        </Button>
+        <Button
+          color="gray"
+          variant="soft"
+          disabled={currentPage === pageCount}
+          onClick={() => changePage(currentPage + 1)}
+        >
+          <ChevronRightIcon />
+        </Button>
+        <Button
+          color="gray"
+          variant="soft"
+          disabled={currentPage === pageCount}
+          onClick={() => changePage(pageCount)}
+        >
+          <DoubleArrowRightIcon />
+        </Button>
+      </Flex>
+    </div>
   );
 };
 
